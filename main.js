@@ -7,42 +7,41 @@ const inputQuantidade = document.getElementById('input-quantidade');
 const btnCadastrar = document.getElementById('btn-cadastrar');
 const listaMateriais = document.getElementById('lista-materiais');
 
-// ==========================================
-// FUNÇÃO 1: GET - Buscar e Listar Materiais
-// ==========================================
+//Buscar e Listar Materiais
 async function carregarMateriais() {
     try {
         const response = await fetch(API_URL);
-        
+
         if (!response.ok) {
             throw new Error('Erro ao buscar dados da API');
         }
 
         const materiais = await response.json();
-        
+
         // Limpa a tabela antes de renderizar para não duplicar
         listaMateriais.innerHTML = '';
 
         // Preenche a tabela dinamicamente
         materiais.forEach(material => {
             const linha = document.createElement('tr');
+
+            // Tenta pegar o ID padrão
+            const idMaterial = material.id || material.material || material.Id || material.ID;
+
             linha.innerHTML = `
-                <td>${material.id}</td>
+                <td>${idMaterial}</td>
                 <td>${material.nome}</td>
                 <td>${material.quantidade} unidades</td>
             `;
             listaMateriais.appendChild(linha);
-        });
+        });s
 
     } catch (error) {
         console.error('Erro no GET:', error);
         listaMateriais.innerHTML = `<tr><td colspan="3" style="color: red; text-align: center;">Erro ao carregar materiais. Verifique a API.</td></tr>`;
     }
 }
-
-// ==========================================
-// FUNÇÃO 2: POST - Cadastrar Novo Material
-// ==========================================
+//Cadastrar Novo Material
 async function cadastrarMaterial() {
     const nome = inputNome.value.trim();
     const quantidade = parseInt(inputQuantidade.value);
@@ -92,11 +91,6 @@ async function cadastrarMaterial() {
         btnCadastrar.textContent = 'Cadastrar Material';
     }
 }
-
-// ==========================================
-// EVENT LISTENERS - Gatilhos de Inicialização
-// ==========================================
-
 // Escuta o clique no botão de cadastro obrigatório
 btnCadastrar.addEventListener('click', cadastrarMaterial);
 
