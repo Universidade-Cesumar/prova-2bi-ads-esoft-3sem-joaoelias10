@@ -1,0 +1,147 @@
+/* Reset básico e variáveis de cores (Padrão SENAC/Saúde) */
+:root {
+    --primary-color: #004c97; /* Azul SENAC */
+    --secondary-color: #008542; /* Verde Saúde/Sucesso */
+    --background-color: #f4f6f9;
+    --card-background: #ffffff;
+    --text-color: #333333;
+    --border-color: #e0e0e0;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+    background-color: var(--background-color);
+    color: var(--text-color);
+    line-height: 1.6;
+}
+
+.container {
+    width: 100%;
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+/* Header */
+header {
+    background-color: var(--primary-color);
+    color: white;
+    padding: 30px 0;
+    margin-bottom: 30px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    text-align: center;
+}
+
+header h1 {
+    font-size: 2.2rem;
+    margin-bottom: 5px;
+}
+
+header p {
+    font-weight: 300;
+    opacity: 0.9;
+}
+
+/* Cards (Formulário e Listagem) */
+.card {
+    background: var(--card-background);
+    border-radius: 8px;
+    padding: 25px;
+    margin-bottom: 30px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.05);
+    border-left: 5px solid var(--primary-color);
+}
+
+.card h2 {
+    margin-bottom: 20px;
+    font-size: 1.4rem;
+    color: var(--primary-color);
+}
+
+/* Formulários */
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    font-size: 1rem;
+    transition: border-color 0.3s;
+}
+
+.form-group input:focus {
+    outline: none;
+    border-color: var(--primary-color);
+}
+
+/* Botão Principal */
+#btn-cadastrar {
+    background-color: var(--secondary-color);
+    color: white;
+    border: none;
+    padding: 14px 28px;
+    font-size: 1rem;
+    font-weight: bold;
+    border-radius: 4px;
+    cursor: pointer;
+    width: 100%;
+    transition: background-color 0.2s, transform 0.1s;
+}
+
+#btn-cadastrar:hover {
+    background-color: #006b35;
+}
+
+#btn-cadastrar:active {
+    transform: scale(0.98);
+}
+
+/* Tabela Responsiva */
+.table-responsive {
+    width: 100%;
+    overflow-x: auto;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+    text-align: left;
+}
+
+table th, table td {
+    padding: 14px 16px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+table th {
+    background-color: #f8fafc;
+    color: var(--primary-color);
+    font-weight: 700;
+}
+
+table tbody tr:hover {
+    background-color: #f8fafc;
+}
+
+/* Responsividade Básica */
+@media (min-width: 768px) {
+    #btn-cadastrar {
+        width: auto; /* No desktop o botão não fica gigante */
+    }
+}
