@@ -1,4 +1,3 @@
-// CONSTANTES GLOBAIS - Sua URL oficial do MockAPI configurada
 const API_URL = 'https://6a29e4bff59cb8f65f1db7c4.mockapi.io/api-almoxarifado/materiais';
 
 // CAPTURA DOS ELEMENTOS DO DOM (Respeitando rigorosamente o Contrato Técnico)
@@ -34,7 +33,7 @@ async function carregarMateriais() {
                 <td>${material.quantidade} unidades</td>
             `;
             listaMateriais.appendChild(linha);
-        });s
+        });
 
     } catch (error) {
         console.error('Erro no GET:', error);
