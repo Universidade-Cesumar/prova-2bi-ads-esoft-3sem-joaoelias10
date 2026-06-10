@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Almoxarifado de Enfermagem - SENAC</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <header>
+        <div class="container">
+            <h1>Controle de Almoxarifado</h1>
+            <p>Técnico em Enfermagem - SENAC Zona Norte</p>
+        </div>
+    </header>
+
+    <main class="container">
+        <section class="card">
+            <h2>Cadastrar Novo Material</h2>
+            <form id="form-cadastro" onsubmit="return false;">
+                <div class="form-group">
+                    <label for="input-nome">Nome do Material:</label>
+                    <input type="text" id="input-nome" placeholder="Ex: Seringa 10ml, Luva de Procedimento" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="input-quantidade">Quantidade Inicial:</label>
+                    <input type="number" id="input-quantidade" min="0" placeholder="Ex: 50" required>
+                </div>
+
+                <button type="button" id="btn-cadastrar">Cadastrar Material</button>
+            </form>
+        </section>
+
+        <section class="card">
+            <h2>Materiais em Estoque</h2>
+            <div class="table-responsive">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Nome do Material</th>
+                            <th>Quantidade</th>
+                        </tr>
+                    </thead>
+                    <tbody id="lista-materials">
+                        </tbody>
+                </table>
+            </div>
+        </section>
+    </main>
+
+    <script src="script.js"></script>
+</body>
+</html>
