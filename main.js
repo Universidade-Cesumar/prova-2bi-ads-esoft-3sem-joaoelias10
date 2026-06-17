@@ -153,6 +153,42 @@ listaMateriais.addEventListener('click', async (event) => {
             return; // Interrompe a execução se a validação falhar
         }
 
-        alert(`Validação aceita! ${quantidadeRetirada} de ${estoqueAtual}.`);
+// Cálculo do novo saldo do estoque
+        const novaQuantidade = estoqueAtual - quantidadeRetirada;
+
+        // Desabilita o botão para evitar cliques múltiplos durante a requisição
+        alvo.disabled = true;
+        alvo.textContent = "...";
+
+        try {
+            // Faz a atualização (PUT) no MockAPI
+            const response = await fetch(`${API_URL}/${id}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ quantidade: novaQuantidade })
+            });
+
+            if (!response.ok) {
+                throw new Error('Erro ao atualizar estoque no servidor');
+            }
+
+            // Limpa o campo de entrada do usuário
+            inputRetirada.value = '';
+
+            // Atualiza a listagem na tela dinamicamente para a Camila ver o novo saldo
+            await carregarMateriais();
+            alert('Baixa realizada e estoque atualizado com sucesso!');
+
+        } catch (error) {
+            console.error('Erro no PUT:', error);
+            alert('Não foi possível registrar a baixa. Tente novamente.');
+            
+            // Se der erro, devolve o texto original do botão
+            alvo.disabled = false;
+            alvo.textContent = 'Baixar';
+        }
     }
 });
+
