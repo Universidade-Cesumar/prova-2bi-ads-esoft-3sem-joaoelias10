@@ -95,3 +95,29 @@ btnCadastrar.addEventListener('click', cadastrarMaterial);
 
 // Executa o GET automaticamente assim que a página carrega completamente
 document.addEventListener('DOMContentLoaded', carregarMateriais);
+
+// FUNÇÃO DE VALIDAÇÃO
+function validarRetirada(estoqueAtual, quantidadeRetirada) {
+    const atual = Number(estoqueAtual);
+    const retirada = Number(quantidadeRetirada);
+
+    // Impede valores negativos ou zerados
+    if (retirada <= 0) {
+        alert("A quantidade de retirada deve ser maior que zero.");
+        return false;
+    }
+
+    // Impede caracteres inválidos
+    if (isNaN(retirada)) {
+        alert("Por favor, insira um número válido.");
+        return false;
+    }
+
+    // Impede retirar mais do que há no estoque
+    if (retirada > atual) {
+        alert(`Saldo insuficiente! O estoque atual possui apenas ${atual} unidades.`);
+        return false;
+    }
+
+    return true; // Passou em todas as validações
+}
