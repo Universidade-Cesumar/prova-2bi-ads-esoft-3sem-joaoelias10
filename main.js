@@ -52,50 +52,76 @@ async function carregarMateriais() {
         listaMateriais.innerHTML = `<tr><td colspan="3" style="color: red; text-align: center;">Erro ao carregar materiais. Verifique a API.</td></tr>`;
     }
 }
-//Cadastrar Novo Material
+// Cadastrar Novo Material (Soma quantidades se o item for duplicado)
 async function cadastrarMaterial() {
     const nome = inputNome.value.trim();
-    const quantidade = parseInt(inputQuantidade.value);
+    const quantidadeNova = parseInt(inputQuantidade.value);
 
     // Validação básica de segurança antes do envio
-    if (!nome || isNaN(quantidade) || quantidade < 0) {
+    if (!nome || isNaN(quantidadeNova) || quantidadeNova < 0) {
         alert('Por favor, preencha todos os campos corretamente.');
         return;
     }
 
-    // Desabilita o botão para evitar cliques duplos (Boa prática de UX)
+    // Desabilita o botão para evitar cliques duplos
     btnCadastrar.disabled = true;
-    btnCadastrar.textContent = 'Cadastrando...';
-
-    const novoMaterial = {
-        nome: nome,
-        quantidade: quantidade
-    };
+    btnCadastrar.textContent = 'Processando...';
 
     try {
-        const response = await fetch(API_URL, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(novoMaterial)
-        });
+        // 1. Busca a lista atual do servidor para checar se já existe o item
+        const responseBusca = await fetch(API_URL);
+        if (!responseBusca.ok) throw new Error('Erro ao verificar estoque existente.');
+        
+        const materiaisExistentes = await responseBusca.json();
 
-        if (!response.ok) {
-            throw new Error('Erro ao cadastrar material');
+        // 2. Procura se algum material tem o mesmo nome (ignorando maiúsculas/minúsculas)
+        const itemDuplicado = materiaisExistentes.find(
+            material => material.nome.toLowerCase() === nome.toLowerCase()
+        );
+
+        // CASO JÁ EXISTA: Faz um PUT somando as quantidades
+        if (itemDuplicado) {
+            const novaQuantidadeTotal = Number(itemDuplicado.quantidade) + quantidadeNova;
+            const idMaterial = itemDuplicado.id || itemDuplicado.material || itemDuplicado.Id || itemDuplicado.ID;
+
+            const responsePut = await fetch(`${API_URL}/${idMaterial}`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ quantidade: novaQuantidadeTotal })
+            });
+
+            if (!responsePut.ok) throw new Error('Erro ao atualizar quantidade do item existente.');
+
+            alert(`${quantidadeNova} "${nome}" adicionados(as) ao estoque.`);
+        
+        // CASO NÃO EXISTA: Segue o fluxo normal e faz um POST
+        } else {
+            const novoMaterial = {
+                nome: nome,
+                quantidade: quantidadeNova
+            };
+
+            const responsePost = await fetch(API_URL, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(novoMaterial)
+            });
+
+            if (!responsePost.ok) throw new Error('Erro ao cadastrar novo material.');
+
+            alert('Novo material cadastrado com sucesso!');
         }
 
-        // Limpa os campos do formulário após o sucesso
+        // Limpa os campos do formulário após o sucesso (comum para ambos os fluxos)
         inputNome.value = '';
         inputQuantidade.value = '';
 
-        // Atualiza a listagem na tela imediatamente para a Camila ver o resultado
+        // Atualiza a listagem na tela imediatamente
         await carregarMateriais();
-        alert('Material cadastrado com sucesso!');
 
     } catch (error) {
-        console.error('Erro no POST:', error);
-        alert('Falha ao salvar o material. Tente novamente.');
+        console.error('Erro no processo de cadastro:', error);
+        alert('Falha ao processar a operação. Tente novamente.');
     } finally {
         // Reativa o botão
         btnCadastrar.disabled = false;
@@ -190,10 +216,7 @@ listaMateriais.addEventListener('click', async (event) => {
             alvo.textContent = 'Baixar';
         }
     }
-
-    // ------------------------------------------
     // FLUXO DO BOTÃO EXCLUIR (DELETE)
-    // ------------------------------------------
     if (alvo.classList.contains('btn-excluir')) {
         // Alerta de confirmação para evitar que a Camila delete algo por acidente
         const confirmar = confirm("Tem certeza que deseja excluir permanentemente este material do almoxarifado?");
