@@ -27,10 +27,22 @@ async function carregarMateriais() {
             // Tenta pegar o ID padrão
             const idMaterial = material.id || material.material || material.Id || material.ID;
 
+            // Guardamos o id e estoque atual no elemento html para usar nos botões depois
+            linha.setAttribute('data-id', idMaterial);
+            linha.setAttribute('data-estoque', material.quantidade);
+
+            // Injetando as tags com os IDs e classes exigidos pelo contrato técnico
             linha.innerHTML = `
                 <td>${idMaterial}</td>
                 <td>${material.nome}</td>
                 <td>${material.quantidade} unidades</td>
+                <td>
+                    <div style="display: flex; gap: 8px; align-items: center;">
+                        <input type="number" id="input-retirada" placeholder="Qtd" min="1" style="width: 70px; padding: 5px; border: 1px solid var(--border-color); border-radius: 4px;">
+                        <button class="btn-baixar" style="background-color: var(--primary-color); color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer;">Baixar</button>
+                        <button class="btn-excluir" style="background-color: #dc3545; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer;">Excluir</button>
+                    </div>
+                </td>
             `;
             listaMateriais.appendChild(linha);
         });
@@ -96,7 +108,7 @@ btnCadastrar.addEventListener('click', cadastrarMaterial);
 // Executa o GET automaticamente assim que a página carrega completamente
 document.addEventListener('DOMContentLoaded', carregarMateriais);
 
-// FUNÇÃO DE VALIDAÇÃO
+// FUNÇÃO OBRIGATÓRIA DE VALIDAÇÃO
 function validarRetirada(estoqueAtual, quantidadeRetirada) {
     const atual = Number(estoqueAtual);
     const retirada = Number(quantidadeRetirada);
