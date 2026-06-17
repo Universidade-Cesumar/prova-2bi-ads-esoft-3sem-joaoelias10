@@ -133,3 +133,26 @@ function validarRetirada(estoqueAtual, quantidadeRetirada) {
 
     return true; // Passou em todas as validações
 }
+
+//FUNÇÃO VALIDADORA DE CLIQUES
+listaMateriais.addEventListener('click', async (event) => {
+    const alvo = event.target;
+    
+    const linhaProduto = alvo.closest('[data-id]');
+    if (!linhaProduto) return;
+
+    const id = linhaProduto.getAttribute('data-id');
+    const estoqueAtual = Number(linhaProduto.getAttribute('data-estoque'));
+
+    // FLUXO DO BOTÃO BAIXAR (Validação)
+    if (alvo.classList.contains('btn-baixar')) {
+        const inputRetirada = linhaProduto.querySelector('#input-retirada');
+        const quantidadeRetirada = parseInt(inputRetirada.value);
+
+        if (!validarRetirada(estoqueAtual, quantidadeRetirada)) {
+            return; // Interrompe a execução se a validação falhar
+        }
+
+        alert(`Validação aceita! ${quantidadeRetirada} de ${estoqueAtual}.`);
+    }
+});
