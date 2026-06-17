@@ -190,5 +190,42 @@ listaMateriais.addEventListener('click', async (event) => {
             alvo.textContent = 'Baixar';
         }
     }
+
+    // ------------------------------------------
+    // FLUXO DO BOTÃO EXCLUIR (DELETE)
+    // ------------------------------------------
+    if (alvo.classList.contains('btn-excluir')) {
+        // Alerta de confirmação para evitar que a Camila delete algo por acidente
+        const confirmar = confirm("Tem certeza que deseja excluir permanentemente este material do almoxarifado?");
+        if (!confirmar) return; // Se ela cancelar, interrompe a ação
+
+        // Desabilita o botão temporariamente
+        alvo.disabled = true;
+        alvo.textContent = "...";
+
+        try {
+            // Faz a requisição DELETE para o MockAPI usando o ID do material
+            const response = await fetch(`${API_URL}/${id}`, {
+                method: 'DELETE'
+            });
+
+            if (!response.ok) {
+                throw new Error('Erro ao deletar material no servidor');
+            }
+
+            // Remove a linha (tr) diretamente do DOM na hora (ganho de performance e UX)
+            linhaProduto.remove();
+            
+            alert('Material removido com sucesso!');
+
+        } catch (error) {
+            console.error('Erro no DELETE:', error);
+            alert('Não foi possível excluir o material. Tente novamente.');
+            
+            // Se der erro, devolve o texto original do botão
+            alvo.disabled = false;
+            alvo.textContent = 'Excluir';
+        }
+    }
 });
 
