@@ -44,3 +44,7 @@ A aplicação implementa regras rígidas de consistência localizadas na arquite
 * **Front-end:** HTML5 Estrutural, CSS3 (Estilização baseada em variáveis nativas e design responsivo) e JavaScript Moderno puro (ES6+, requisições assíncronas com `Async/Await`, `Fetch API` e arquitetura baseada em Delegação de Eventos).
 * **Banco de Dados/API:** MockAPI (Serviço de simulação de APIs RESTful).
 * **Versionamento e Entrega:** Git e GitHub (Histórico de progresso documentado por commits semânticos incrementais).
+
+# Link do Projeto no Ar: [CLIQUE AQUI PARA ACESSAR A APLICAÇÃO](https://universidade-cesumar.github.io/prova-2bi-ads-esoft-3sem-joaoelias10/)
+
+---
