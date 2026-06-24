@@ -262,3 +262,28 @@ listaMateriais.addEventListener('click', async (event) => {
     }
 });
 
+// Barra de pesquisa
+const inputBusca = document.getElementById('input-busca');
+
+if (inputBusca) {
+    inputBusca.addEventListener('input', () => {
+        const termoBusca = inputBusca.value.toLowerCase().trim();
+        const linhas = listaMateriais.querySelectorAll('tr');
+
+        linhas.forEach(linha => {
+            // Captura o texto da segunda coluna (Nome do Material)
+            const colunaNome = linha.querySelector('td:nth-child(2)');
+            
+            if (colunaNome) {
+                const nomeMaterial = colunaNome.textContent.toLowerCase();
+                
+                // Se o nome contiver o termo pesquisado, exibe a linha, caso contrário esconde
+                if (nomeMaterial.includes(termoBusca)) {
+                    linha.style.display = '';
+                } else {
+                    linha.style.display = 'none';
+                }
+            }
+        });
+    });
+}
