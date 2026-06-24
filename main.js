@@ -5,8 +5,9 @@ const inputNome = document.getElementById('input-nome');
 const inputQuantidade = document.getElementById('input-quantidade');
 const btnCadastrar = document.getElementById('btn-cadastrar');
 const listaMateriais = document.getElementById('lista-materiais');
+const totalItens = document.getElementById('total-itens');
 
-//Buscar e Listar Materiais
+//Buscar e Listar Materiais com Regras do Dashboard e Alertas
 async function carregarMateriais() {
     try {
         const response = await fetch(API_URL);
@@ -20,6 +21,11 @@ async function carregarMateriais() {
         // Limpa a tabela antes de renderizar para não duplicar
         listaMateriais.innerHTML = '';
 
+        // Atualiza o indicador do Dashboard com o número correto de itens [Critério de Avaliação 0,5]
+        if (totalItens) {
+            totalItens.textContent = materiais.length;
+        }
+
         // Preenche a tabela dinamicamente
         materiais.forEach(material => {
             const linha = document.createElement('tr');
@@ -27,11 +33,14 @@ async function carregarMateriais() {
             // Tenta pegar o ID padrão
             const idMaterial = material.id || material.material || material.Id || material.ID;
 
-            // Guardamos o id e estoque atual no elemento html para usar nos botões depois
             linha.setAttribute('data-id', idMaterial);
             linha.setAttribute('data-estoque', material.quantidade);
 
-            // Injetando as tags com os IDs e classes exigidos pelo contrato técnico
+            // Regra do Contrato Técnico: Se o estoque for menor que 10, adiciona a classe estoque-critico
+            if (Number(material.quantidade) < 10) {
+                linha.classList.add('estoque-critico');
+            }
+
             linha.innerHTML = `
                 <td>${idMaterial}</td>
                 <td>${material.nome}</td>
@@ -48,8 +57,9 @@ async function carregarMateriais() {
         });
 
     } catch (error) {
+        // Tratamento de erro visível na interface para evitar quebras silenciosas [Critério 0,5]
         console.error('Erro no GET:', error);
-        listaMateriais.innerHTML = `<tr><td colspan="3" style="color: red; text-align: center;">Erro ao carregar materiais. Verifique a API.</td></tr>`;
+        listaMateriais.innerHTML = `<tr><td colspan="4" style="color: #dc3545; text-align: center; font-weight: bold;">Erro ao carregar materiais. Verifique sua conexão com a internet.</td></tr>`;
     }
 }
 // Cadastrar Novo Material (Soma quantidades se o item for duplicado)

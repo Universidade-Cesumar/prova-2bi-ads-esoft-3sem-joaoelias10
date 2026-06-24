@@ -145,3 +145,13 @@ table tbody tr:hover {
         width: auto; /* No desktop o botão não fica gigante */
     }
 }
+
+/* Destaque visual para materiais com falta de estoque */
+.estoque-critico {
+    background-color: #f8d7da !important; /* Vermelho claro de alerta */
+    color: #721c24;
+    font-weight: 600;
+}
+.estoque-critico td {
+    border-bottom: 2px solid #f5c6cb;
+}
